@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.spalda.usu_sb.model.Employee;
@@ -19,8 +17,8 @@ import com.spalda.usu_sb.service.EmployeesSrv;
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*") //supposedly recommended but doesn't work
-@RestController
 @RequestMapping("/api")
+@RestController
 public class EmployeesController {
 
     @Autowired
@@ -28,30 +26,7 @@ public class EmployeesController {
 
     @RequestMapping(value="/employees/gentbl", method=RequestMethod.POST)
     public void genTbl() {
-    	List<Employee> empls = new ArrayList<>(Arrays.asList(
-    		    new Employee("Milan", 24, "Frontend developer"),
-    		    new Employee("Honza", 30, "Frontend developer"),
-    		    new Employee("Jana", 30, "Frontend developer"),
-    		    new Employee("Vera", 36, "Frontend developer"),
-    		    new Employee("Zdenek", 50, "Frontend developer"),
-    		    new Employee("Jarek", 62, "Frontend developer"),
-    		    new Employee("Zuzana", 63, "Frontend developer"),
-			    new Employee("Karel", 45, "Backend developer"),
-			    new Employee("Josef", 18, "Backend developer"),
-			    new Employee("Petr", 37, "Backend developer"),
-			    new Employee("Roman", 37, "Backend developer"),
-			    new Employee("Roman", 34, "Product owner"),
-			    new Employee("Ales", 43, "Product owner"),
-			    new Employee("Jana", 53, "Scrum master"),
-			    new Employee("Jirka", 28, "Scrum master"),
-			    new Employee("Jirka", 50, "Scrum master"),
-			    new Employee("Alena", 58, "CEO")
-    		));
-    	empSrv.deleteAll();
-    	empls.forEach((Employee emp) -> {
-            empSrv.createEmployee(emp);    		
-    	});
-    	empSrv.commit();
+    	empSrv.genTbl();
     }
 
     @RequestMapping(value="/employee", method=RequestMethod.POST)
