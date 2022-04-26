@@ -1,0 +1,121 @@
+﻿<html>
+<title>USU Test</title>
+<style>
+div.table {overflow-x: hidden;overflow-y: auto;max-height: 500px;border-color:#90ee90;border-style:solid;}
+div.buttons {border-style:none;justify-content: center;display: flex;}
+</style>
+<script type="text/javascript">
+const USU_serverURL = "http://127.0.0.1:8080/api/";
+
+function USU_table() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", USU_serverURL + "employees");
+
+    xhr.onload = () => {
+        document.getElementById("full").innerHTML = xhr.responseText;
+    }
+
+    xhr.send();
+}
+
+function USU_avgAge() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", USU_serverURL + "employees/avgage");
+
+    xhr.onload = () => {
+        document.getElementById("avgage").innerHTML = xhr.responseText;
+    }
+
+    xhr.send();
+}
+
+function USU_ageDistr() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", USU_serverURL + "employees/agedistr");
+
+    xhr.onload = () => {
+        document.getElementById("agedistr").innerHTML = xhr.responseText;
+    }
+
+    xhr.send();
+}
+
+function USU_refresh() {
+    var el;
+    //if ((el = document.getElementById("full").innerHTML) && el.length > 0) {
+        USU_table();
+    //}
+    if ((el = document.getElementById("avgage").innerHTML) && el.length > 0) {
+        USU_avgAge();
+    }
+    if ((el = document.getElementById("agedistr").innerHTML) && el.length > 0) {
+        USU_ageDistr();
+    }
+
+}
+
+function USU_insert(name, age, position) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", USU_serverURL + "employee");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xhr.onload = () => {
+        console.log(xhr.responseText)
+        USU_refresh();
+    }
+
+    xhr.send('{"name":"'+name+'","age":'+age+',"position":"'+position+'"}');
+}
+
+function USU_update(name, age, position, pk) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("PUT", USU_serverURL + "employee/"+pk);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xhr.onload = () => {
+        USU_refresh();
+    }
+
+    xhr.send('{"name":"'+name+'","age":'+age+',"position":"'+position+'"}');
+}
+
+function USU_delete(pk) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("DELETE", USU_serverURL + "employee/"+pk);
+
+    xhr.onload = () => {
+        USU_refresh();
+    }
+
+    xhr.send();
+}
+
+function USU_generateDB() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", USU_serverURL + "employees/gentbl");
+
+    xhr.onload = () => {
+        USU_refresh();
+    }
+
+    xhr.send();
+}
+
+</script>
+</head>
+<body>
+<div id="full" class="table"></div>
+<div id="avgage" class="table"></div>
+<div id="agedistr" class="table"></div>
+<!-- Jana", "age":"30", "position":"Frontend developer -->
+<div class="buttons">
+<input type="button" value="1.Generate DB" name="resetDB" onClick="USU_generateDB()">
+<input type="button" value="2.Show Table" name="table" onClick="USU_table()">
+<input type="button" value="3.Insert Person" name="insert" onClick="USU_insert('Jana', 30, 'Frontend developer')">
+<input type="button" value="4.Update Person" name="update" onClick="USU_update('Lojza', 3, 'Scrum master', 18)">
+<input type="button" value="5.Remove Person" name="delete" onClick="USU_delete(18)">
+<input type="button" value="6.Query Avg Age" name="avgAge" onClick="USU_avgAge()">
+<input type="button" value="7.Query Age Distribution" name="ageDistr" onClick="USU_ageDistr()">
+</div>
+</body>
+</html>
